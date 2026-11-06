@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<link rel="stylesheet" type="text/css" href="base.css">
+<link rel="stylesheet" type="text/css" href="exe_highlighter.css">
+<link rel="stylesheet" type="text/css" href="content.css">
+<link rel="stylesheet" type="text/css" href="nav.css">
+<meta http-equiv="content-type" content="text/html;  charset=utf-8">
+<title>1.2.- Cadenas de texto. </title>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<meta name="generator" content="eXeLearning 2.6 - exelearning.net">
+<!--[if lt IE 9]><script type="text/javascript" src="exe_html5.js"></script><![endif]-->
+<script type="text/javascript" src="exe_jquery.js"></script>
+<script type="text/javascript" src="exe_highlighter.js"></script>
+<script type="text/javascript" src="common_i18n.js"></script>
+<script type="text/javascript" src="common.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1"></head>
+<body class="exe-web-site" id="exe-node-3"><script type="text/javascript">document.body.className+=" js"</script>
+<div id="content">
+<p id="skipNav"><a href="#main" class="sr-av">Saltar la navegación</a></p>
+<section id="emptyHeader"></section>
+<nav id="siteNav">
+<ul>
+   <li><a href="index.html" class="daddy main-node">Características del lenguaje PHP.</a></li>
+   <li class="current-page-parent"><a href="1_elementos_del_lenguaje_php.html" class="current-page-parent daddy">1.- Elementos del lenguaje PHP.</a>
+   <ul>
+      <li><a href="11_generacin_de_cdigo_html.html" class="no-ch">1.1.- Generación de código HTML.</a></li>
+      <li id="active"><a href="12_cadenas_de_texto.html" class="active no-ch">1.2.- Cadenas de texto.</a></li>
+      <li><a href="13_funciones_relacionadas_con_los_tipos_de_datos.html" class="daddy">1.3.- Funciones relacionadas con los tipos de datos.</a>
+      <ul class="other-section">
+         <li><a href="131_funciones_de_fecha_i.html" class="no-ch">1.3.1.- Funciones de Fecha I.</a></li>
+         <li><a href="132_funciones_de_fecha_ii.html" class="no-ch">1.3.2.- Funciones de Fecha II.</a></li>
+      </ul>
+      </li>
+      <li><a href="14_variables_especiales_de_php.html" class="no-ch">1.4.- Variables especiales de PHP.</a></li>
+   </ul>
+   </li>
+   <li><a href="2_estructuras_de_control.html" class="daddy">2.- Estructuras de control.</a>
+   <ul class="other-section">
+      <li><a href="21_condicionales.html" class="no-ch">2.1.- Condicionales.</a></li>
+      <li><a href="22_bucles.html" class="no-ch">2.2.- Bucles.</a></li>
+   </ul>
+   </li>
+   <li><a href="3_funciones.html" class="daddy">3.- Funciones.</a>
+   <ul class="other-section">
+      <li><a href="31_inclusin_de_ficheros_externos.html" class="no-ch">3.1.- Inclusión de ficheros externos.</a></li>
+      <li><a href="32_ejecucin_y_creacin_de_funciones.html" class="no-ch">3.2.- Ejecución y creación de funciones.</a></li>
+      <li><a href="33_argumentos.html" class="no-ch">3.3.- Argumentos.</a></li>
+   </ul>
+   </li>
+   <li><a href="4_tipos_de_datos_compuestos.html" class="daddy">4.- Tipos de datos compuestos.</a>
+   <ul class="other-section">
+      <li><a href="41_recorrer_arrays_i.html" class="no-ch">4.1.- Recorrer arrays (I).</a></li>
+      <li><a href="42_recorrer_arrays_ii.html" class="no-ch">4.2.- Recorrer arrays (II).</a></li>
+      <li><a href="43_funciones_relacionadas_con_los_tipos_de_datos_compuestos.html" class="no-ch">4.3.- Funciones relacionadas con los tipos de datos compuestos.</a></li>
+   </ul>
+   </li>
+   <li><a href="5_formularios_web.html" class="daddy">5.- Formularios web.</a>
+   <ul class="other-section">
+      <li><a href="51_procesamiento_de_la_informacin_devuelta_por_un_formulario_web.html" class="no-ch">5.1.- Procesamiento de la información devuelta por un formulario web.</a></li>
+      <li><a href="52_validacin_de_formularios_web_en_php.html" class="no-ch">5.2.- Validación de formularios web en PHP.</a></li>
+      <li><a href="53_subiendo_archivos_al_servidor.html" class="no-ch">5.3.- Subiendo archivos al servidor.</a></li>
+   </ul>
+   </li>
+   <li><a href="anexo_i_utilizacin_de_la_funcin_print_en_php.html" class="no-ch">Anexo I.- Utilización de la función print en PHP.</a></li>
+   <li><a href="anexo_ii_solucin_propuesta_i.html" class="no-ch">Anexo II.- Solución propuesta I.</a></li>
+   <li><a href="anexo_iii_solucin_propuesta_ii.html" class="no-ch">Anexo III.- Solución propuesta II.</a></li>
+   <li><a href="anexo_iv_solucin_propuesta_iii.html" class="no-ch">Anexo IV.- Solución propuesta III.</a></li>
+   <li><a href="anexo_v_solucin_propuesta_iv.html" class="no-ch">Anexo V.- Solución propuesta IV.</a></li>
+   <li><a href="anexo_vi_solucin_propuesta_v.html" class="no-ch">Anexo VI.- Solución propuesta V.</a></li>
+   <li><a href="anexo_vii_ejemplo_action_formulario.html" class="no-ch">Anexo VII.- Ejemplo action Formulario.</a></li>
+   <li><a href="anexo_viii_ejemplo_de_validacin.html" class="no-ch">Anexo VIII.- Ejemplo de validación.</a></li>
+   <li><a href="anexo_ix_solucin_propuesta_vi.html" class="no-ch">Anexo IX.- Solución propuesta VI.</a></li>
+   <li><a href="anexo_x_ejemplo_subir_pdf.html" class="no-ch">Anexo X.- Ejemplo Subir PDF.</a></li>
+</ul>
+</nav>
+<div id="topPagination">
+<nav class="pagination noprt">
+<a href="11_generacin_de_cdigo_html.html" class="prev"><span><span>« </span>Anterior</span></a> <span class="sep">| </span><a href="13_funciones_relacionadas_con_los_tipos_de_datos.html" class="next"><span>Siguiente<span> »</span></span></a>
+</nav>
+</div>
+<div id="main-wrapper">
+<section id="main">
+<header id="nodeDecoration"><h1 id="nodeTitle">1.2.- Cadenas de texto.</h1></header>
+<article class="iDevice_wrapper FreeTextfpdIdevice" id="id6">
+<div class="iDevice emphasis0">
+<div id="ta6_73" class="block iDevice_content">
+<figure class="exe-figure exe-image float-right license-custom" style="width: 210px;"><img src="DWES02_CONT_Ro4_Texto.jpg" alt="Imagen de un fragmentos de una código curvándose sobre un fondo oscuro.e un libro,t exto escrito en papel " title="Código curvándose" class="elemento_derecha" width="210" height="140">
+<figcaption class="figcaption"><a href="https://pixabay.com/es/illustrations/analytics-informaci%C3%B3n-innovaci%C3%B3n-3088958/" target="_blank" class="author" title="Acceder al web original de la imagen (se abre en una ventana nueva)." rel="noopener">xresch</a> <span class="license"><span class="sep">(</span><a href="https://pixabay.com/es/service/license/" target="_blank" title="Acceder a los términos de la licencia Pixabay License (se abre en una nueva ventana)" rel="noopener">Pixabay License</a><span class="sep">)</span></span></figcaption>
+</figure>
+<p>En <abbr title="Hypertext Preprocessor" lang="en">PHP</abbr> las cadenas de texto pueden usar tanto comillas simples como comillas dobles. Sin embargo hay una diferencia importante entre usar unas u otras. Cuando se pone una variable dentro de unas comillas dobles, se procesa y se sustituye por su valor. Así, el ejemplo anterior sobre el uso de <code>print</code> también podía haberse puesto de la siguiente forma:</p>
+<div class="highlighted-code code-style-2 language-php">
+<div>
+<pre><code>&lt;?php
+    $modulo="DWES";
+    print "&lt;p&gt;Módulo: $modulo&lt;/p&gt;"
+?&gt;</code></pre>
+</div>
+</div>
+<p>La variable <code>$modulo</code> se reconoce dentro de las comillas dobles, y se sustituye por el valor "<abbr title="Desarrollo Web en Entorno Servidor.">DWES</abbr>" antes de generar la salida. Si esto mismo lo hubieras hecho utilizando comillas simples, no se realizaría sustitución alguna.</p>
+</div>
+</div>
+</article>
+<article class="iDevice_wrapper DestacadofpdIdevice" id="id7">
+<div class="iDevice emphasis0">
+<div class="iDevice_destacadofpd">
+<div id="ta7_70" class="block iDevice_content">
+<p>Para que <abbr title="Hypertext Preprocessor" lang="en">PHP</abbr> distinga correctamente el texto que forma la cadena del nombre de la variable, a veces es necesario rodearla entre llaves. Sobre todo cuando trabajemos con <abbr title="Programación Orientada a Objetos">POO</abbr>.</p>
+<div class="highlighted-code code-style-2 language-php">
+<div>
+<pre><code>print "&lt;p&gt;Módulo: ${modulo}&lt;/p&gt;"</code><code><br></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+<article class="iDevice_wrapper FreeTextfpdIdevice" id="id8">
+<div class="iDevice emphasis0">
+<div id="ta8_73" class="block iDevice_content">
+<p>Cuando se usan comillas simples, sólo se realizan dos sustituciones dentro de la cadena:</p>
+<ol style="list-style-type: decimal;" class=" auto-numbered">
+<li>Cuando se encuentra la secuencia de caracteres <strong>\'</strong>, se muestra en la salida una comilla simple.</li>
+<li>Cuando se encuentra la secuencia <strong>\\</strong>, se muestra en la salida una barra invertida.</li>
+</ol>
+<p>Estas secuencias se conocen como <strong>secuencias de escape</strong>. En las cadenas que usan comillas dobles, además de la secuencia <strong>\\</strong>, se pueden usar algunas más, pero no la secuencia <strong>\'</strong>. En esta tabla puedes ver las secuencias de escape que se pueden utilizar, y cuál es su resultado.</p>
+<table class="tabla" style="border-width: 0px;" summary="Cuadro o tabla de nueve filas por dos columnas, de título “Secuencias de escape”, de modo que para cada secuencia nos indica su resultado correspondiente. Debe ser leída en filas de izquierda a derecha. " border="0"><caption>Secuencias de escape.</caption>
+<thead>
+<tr>
+<th scope="col">
+<p>Secuencia</p>
+</th>
+<th scope="col">
+<p>Resultado</p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">
+<p align="center"><code>\\</code></p>
+</th>
+<td>
+<p>se muestra una barra invertida.</p>
+</td>
+</tr>
+<tr>
+<th scope="row">
+<p align="center"><code>\'</code></p>
+</th>
+<td>
+<p>se muestra una comilla simple.</p>
+</td>
+</tr>
+<tr>
+<th scope="row">
+<p align="center"><code>\"</code></p>
+</th>
+<td>
+<p>se muestra una comilla doble.</p>
+</td>
+</tr>
+<tr>
+<th scope="row">
+<p align="center"><code>\n</code></p>
+</th>
+<td>
+<p>se muestra un avance de línea (LF o 0x0A (10) en ASCII).</p>
+</td>
+</tr>
+<tr>
+<th scope="row">
+<p align="center"><code>\r</code></p>
+</th>
+<td>
+<p>se muestra un retorno de carro (CR o 0x0D (13) en ASCII).</p>
+</td>
+</tr>
+<tr>
+<th scope="row">
+<p align="center"><code>\t</code></p>
+</th>
+<td>
+<p>se muestra un tabulador horizontal (HT o 0x09 (9) en ASCII).</p>
+</td>
+</tr>
+<tr>
+<th scope="row">
+<p align="center"><code>\v</code></p>
+</th>
+<td>
+<p>se muestra un tabulador vertical (VT o 0x0B (11) en ASCII).</p>
+</td>
+</tr>
+<tr>
+<th scope="row">
+<p align="center"><code>\f</code></p>
+</th>
+<td>
+<p>se muestra un avance de página (FF o 0x0C (12) en ASCII).</p>
+</td>
+</tr>
+<tr>
+<th scope="row">
+<p align="center"><code>\$</code></p>
+</th>
+<td>
+<p>se muestra un signo del dólar.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+<p>En <abbr title="Hypertext Preprocessor" lang="en">PHP</abbr> tienes dos operadores exclusivos para trabajar con cadenas de texto. Con el operador de concatenación punto (.) puedes unir las dos cadenas de texto que le pases como operandos. El operador de asignación y concatenación (<code>.=</code>) concatena al argumento del lado izquierdo la cadena del lado derecho.</p>
+<div class="highlighted-code code-style-2 language-php">
+<div>
+<pre><code>&lt;?php
+    $a = "Módulo ";
+    $b = $a . "DWES"; // ahora $b contiene "Módulo DWES"
+    $a .= "DWES"; // ahora $a también contiene "Módulo DWES"
+?&gt; </code></pre>
+</div>
+</div>
+<p>En <abbr title="Hypertext Preprocessor" lang="en">PHP</abbr> tienes otra alternativa para crear cadenas: la sintaxis <strong></strong><span lang="en"><strong><span lang="en">heredoc</span></strong></span>. Consiste en poner el operador <code>"&lt;&lt;&lt;"</code> seguido de un identificador de tu elección, y a continuación y empezando en la línea siguiente la cadena de texto, sin utilizar comillas. La cadena finaliza cuando escribes ese mismo identificador en una nueva línea. Esta línea de cierre no debe llevar más caracteres, ni siquiera espacios o sangría, salvo quizás un punto y coma después del identificador.</p>
+<div class="highlighted-code code-style-2 language-php">
+<div>
+<pre><code>&lt;?php
+    $a = &lt;&lt;&lt;MICADENA
+    Desarrollo de Aplicaciones Web&lt;br /&gt;
+    Desarrollo Web en Entorno Servidor
+    MICADENA;
+    print $a;
+?&gt; </code></pre>
+</div>
+</div>
+<p>El texto se procesa de igual forma que si fuera una cadena entre comillas dobles, sustituyendo variables y secuencias de escape. Si no quisieras que se realizara ninguna sustitución, debes poner el identificador de apertura entre comillas simples.</p>
+<div class="highlighted-code code-style-2 language-php">
+<div>
+<pre><code>$a = &lt;&lt;&lt;'MICADENA'
+
+... 
+
+MICADENA; </code></pre>
+</div>
+</div>
+<p></p>
+<p><code></code></p>
+</div>
+</div>
+</article>
+</section>
+</div>
+<div id="bottomPagination">
+<nav class="pagination noprt">
+<a href="11_generacin_de_cdigo_html.html" class="prev"><span><span>« </span>Anterior</span></a> <span class="sep">| </span><a href="13_funciones_relacionadas_con_los_tipos_de_datos.html" class="next"><span>Siguiente<span> »</span></span></a>
+</nav>
+</div>
+</div>
+<script type="text/javascript" src="_fpd_js.js"></script></body></html>

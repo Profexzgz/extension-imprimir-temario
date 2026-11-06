@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "FP Virtual - Extractor PDF Profesional",
+  "version": "2.4",
+  "description": "Panel lateral para unificar y exportar temarios completos a PDF.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "sidePanel"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "Abrir panel lateral"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "128": "icon.png"
+  }
+}
