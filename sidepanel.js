@@ -1,15 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const APP_VERSION = (typeof EXTENSION_VERSION_DATA !== 'undefined') ? EXTENSION_VERSION_DATA.current : '2.5';
+  const versionBadge = document.getElementById('appVersion');
+  if (versionBadge) versionBadge.innerText = `v${APP_VERSION}`;
+
   const debugLog = document.getElementById('debugLog');
+  const logHistory = [];
 
   function log(msg, type = 'info') {
+    const timestamp = new Date().toISOString();
+    const shortTime = new Date().toLocaleTimeString().split(' ')[0];
+    const formatted = `[${timestamp}] [${type.toUpperCase()}] ${msg}`;
+    logHistory.push(formatted);
+
     const entry = document.createElement('div');
     entry.className = `log-entry ${type === 'err' ? 'log-err' : type === 'ok' ? 'log-ok' : ''}`;
-    entry.innerText = `[${new Date().toLocaleTimeString().split(' ')[0]}] ${msg}`;
+    entry.innerText = `[${shortTime}] ${msg}`;
     debugLog.appendChild(entry);
     debugLog.scrollTop = debugLog.scrollHeight;
   }
 
-  log("SidePanel listo.", "ok");
+  log(`SidePanel inicializado (Versión ${APP_VERSION} | UA: ${navigator.userAgent})`, "ok");
 
   // Control de Pestañas
   document.querySelectorAll('.tab').forEach(tab => {
@@ -18,16 +28,17 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
       tab.classList.add('active');
       document.getElementById(tab.dataset.tab).classList.add('active');
-      log(`Pestaña: ${tab.innerText}`);
+      log(`Cambio de pestaña: ${tab.innerText.trim()}`);
     });
   });
 
   const runScript = (func, args = []) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (!tabs[0]) {
-        log("ERROR: Sin pestaña activa", "err");
+        log("ERROR: No se encontró pestaña activa.", "err");
         return;
       }
+      log(`Ejecutando script en tabId=${tabs[0].id} (${tabs[0].url})`);
       chrome.scripting.executeScript({
         target: { tabId: tabs[0].id, allFrames: true },
         func: func,
@@ -70,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('hideFooter').addEventListener('change', (e) => {
     const hide = e.target.checked;
+    log(`Ocultar Pie Página Actual: ${hide}`);
     runScript((h) => {
       let style = document.getElementById('fp-hide-footer-style');
       if (!style) { style = document.createElement('style'); style.id = 'fp-hide-footer-style'; document.head.appendChild(style); }
@@ -89,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('btnPrintCurrent').addEventListener('click', () => {
-    log("Imprimiendo...", "ok");
+    log("Imprimiendo página actual...", "ok");
     applyMenuToggle();
     setTimeout(() => { runScript(() => { window.print(); }); }, 200);
   });
@@ -109,14 +121,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const hideFooter = document.getElementById('unifyHideFooter').checked;
     const fontSize = document.getElementById('unifyFontSize').value;
 
-    log("Descargando contenido nativo...", "ok");
+    log(`Iniciando unificación | Modo=${pageMode} | AvoidBreak=${avoidBreak} | HideFooter=${hideFooter} | FontSize=${fontSize}px`, "ok");
     document.getElementById('progressBox').style.display = 'block';
     document.getElementById('btnPrintUnified').style.display = 'none';
 
     runScript(async (mode, noBreak, noFooter, fSize) => {
-      console.log("[FP Extension] Unificando HTML intacto...");
+      console.log("[eXeLearning PDF Printer] Unificando HTML intacto...");
 
-      // 1. Extraer URLs exactas del menú de navegación #siteNav
       const navLinks = Array.from(document.querySelectorAll('#siteNav a'))
         .map(a => a.getAttribute('href'))
         .filter(h => h && h.endsWith('.html'));
@@ -128,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // 2. Extraer hojas de estilo originales de la web viva
       const stylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
         .map(l => `<link rel="stylesheet" type="text/css" href="${l.href}">`).join('\n');
 
@@ -139,17 +149,14 @@ document.addEventListener('DOMContentLoaded', () => {
       container.style.fontSize = fSize + 'px';
       document.body.appendChild(container);
 
-      // Inyectar CSS originales en la raíz del contenedor
       container.innerHTML = stylesheets;
 
-      // 3. Recorrer y clonar exacto el contenido HTML de cada enlace
       for (let i = 0; i < uniqueUrls.length; i++) {
         try {
           const res = await fetch(uniqueUrls[i]);
           const text = await res.text();
           const doc = new DOMParser().parseFromString(text, 'text/html');
 
-          // Tomar el bloque principal del tema (#main o #content)
           const mainContent = doc.querySelector('#main') || doc.querySelector('#content') || doc.body;
 
           if (noFooter) {
@@ -158,9 +165,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
           const block = document.createElement('div');
           block.className = `pdf-page-block ${mode === 'page' && i > 0 ? 'fp-page-break' : ''}`;
-          block.style.marginBottom = mode === 'continuous' ? '20px' : '0px';
+          block.style.marginBottom = mode === 'continuous' ? '22px' : '0px';
 
-          // Insertar únicamente el HTML original sin alterar nada de las cajas ni etiquetas
           block.innerHTML = mainContent.innerHTML;
           container.appendChild(block);
         } catch (e) {
@@ -168,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // 4. Inyectar reglas CSS de impresión nativas
+      // Reglas CSS de impresión nativas + Protección completa de cuadros y títulos
       let stylePrint = document.getElementById('fp-style-unified-print');
       if (!stylePrint) {
         stylePrint = document.createElement('style');
@@ -177,12 +183,34 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const breakAvoidCSS = noBreak ? `
-        .iDevice_wrapper, .iDevice_destacadofpd, .iDevice_content, 
-        article, table, pre, .highlighted-code, figure, .exe-figure {
+        [class*="iDevice_"][class*="fpd"],
+        .iDevice_destacadofpd,
+        .iDevice_casopracticofpd,
+        .iDevice_parasabermasfpd,
+        .iDevice_debesconocerfpd,
+        .iDevice_ejercicioresueltofpd,
+        .iDevice_reflexionfpd,
+        .iDevice_orientacionesfpd,
+        .iDevice_curiosidadfpd,
+        .iDevice_citasfpd,
+        .iDevice_contenido,
+        table, pre, .highlighted-code, figure, .exe-figure, .iDevice_header {
+          break-inside: avoid !important;
+          page-break-inside: avoid !important;
+          display: block !important;
+        }
+      ` : '';
+
+      const headingProtectionCSS = `
+        #nodeDecoration, #nodeTitle, header#nodeDecoration,
+        #unified-pdf-container h1, #unified-pdf-container h2, #unified-pdf-container h3,
+        .iDevice_header, .iDeviceTitle {
+          break-after: avoid !important;
+          page-break-after: avoid !important;
           break-inside: avoid !important;
           page-break-inside: avoid !important;
         }
-      ` : '';
+      `;
 
       const modeCSS = mode === 'page' ? `
         .fp-page-break {
@@ -206,23 +234,87 @@ document.addEventListener('DOMContentLoaded', () => {
           body > *:not(#unified-pdf-container) { display: none !important; }
           #unified-pdf-container { display: block !important; width: 100% !important; margin: 0 !important; }
           #unified-pdf-container #siteNav, #unified-pdf-container .pagination { display: none !important; }
+          ${headingProtectionCSS}
           ${modeCSS}
           ${breakAvoidCSS}
         }
       `;
 
-      alert("¡Unificación completada! Haz clic en '2. Guardar Documento Unificado'.");
+      alert("¡Unificación completada! Haz clic en '2. Guardar Documento Unificado (PDF)'.");
     }, [pageMode, avoidBreak, hideFooter, fontSize]);
 
     document.getElementById('pFill').style.width = '100%';
     document.getElementById('pPercent').innerText = '100%';
     document.getElementById('pStatus').innerText = '¡Completado!';
     document.getElementById('btnPrintUnified').style.display = 'block';
-    log("Contenido intacto listo para guardar.", "ok");
+    log("Unificación finalizada y estilos de protección aplicados.", "ok");
   });
 
   document.getElementById('btnPrintUnified').addEventListener('click', () => {
-    log("Abriendo impresión de Chrome...", "ok");
+    log("Abriendo diálogo de impresión de Chrome...", "ok");
     runScript(() => { window.print(); });
+  });
+
+  // --- BOTÓN 3: DESCARGAR LOGS DE DIAGNÓSTICO ---
+  document.getElementById('btnDownloadLogs').addEventListener('click', () => {
+    log("Exportando archivo de logs...", "ok");
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const activeUrl = tabs[0] ? tabs[0].url : 'Desconocida';
+      const configSnapshot = {
+        version: APP_VERSION,
+        url: activeUrl,
+        pageMode: document.getElementById('pageMode').value,
+        avoidBreak: document.getElementById('unifyAvoidBreak').checked,
+        hideFooter: document.getElementById('unifyHideFooter').checked,
+        fontSize: document.getElementById('unifyFontSize').value
+      };
+
+      const report = [
+        `=== REPORTE DE DIAGNÓSTICO - eXeLearning PDF Printer v${APP_VERSION} ===`,
+        `Fecha: ${new Date().toLocaleString()}`,
+        `Configuración activa: ${JSON.stringify(configSnapshot, null, 2)}`,
+        `\n=== HISTORIAL DE LOGS ===`,
+        ...logHistory
+      ].join('\n');
+
+      const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `logs-exelearning-pdf-v${APP_VERSION}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  });
+
+  // --- BOTÓN 4: DESCARGAR CÓDIGO FUENTE COMPLETO ---
+  document.getElementById('btnDownloadCode').addEventListener('click', async () => {
+    log("Empaquetando código fuente de la extensión...", "ok");
+    const filesToExport = ['manifest.json', 'background.js', 'sidepanel.html', 'sidepanel.js', 'versiones.js'];
+    let bundle = `=== CÓDIGO FUENTE COMPLETO - eXeLearning PDF Printer v${APP_VERSION} ===\nFecha de exportación: ${new Date().toLocaleString()}\n\n`;
+
+    for (const file of filesToExport) {
+      try {
+        const res = await fetch(chrome.runtime.getURL(file));
+        if (res.ok) {
+          const content = await res.text();
+          bundle += `====================================================================\n`;
+          bundle += `ARCHIVO: ${file}\n`;
+          bundle += `====================================================================\n`;
+          bundle += `${content}\n\n`;
+        }
+      } catch (e) {
+        bundle += `--- No se pudo leer ${file}: ${e.message} ---\n\n`;
+      }
+    }
+
+    const blob = new Blob([bundle], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `codigo-fuente-exelearning-pdf-v${APP_VERSION}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    log("Código fuente descargado correctamente.", "ok");
   });
 });

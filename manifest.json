@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "FP Virtual - Extractor PDF Profesional",
-  "version": "2.4",
-  "description": "Panel lateral para unificar y exportar temarios completos a PDF.",
+  "name": "eXeLearning PDF Printer",
+  "version": "2.5",
+  "description": "Panel lateral para unificar y exportar temarios completos de eXeLearning a PDF.",
   "permissions": [
     "activeTab",
     "scripting",
